@@ -1,0 +1,232 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ titulo }} | Projeto Cliente{% endblock %}
+
+{% block content %}
+<section class="panel form-panel">
+    <div class="header-row">
+        <h1>{{ titulo }}</h1>
+        <div class="form-toolbar">
+            <button class="button" type="submit" form="cliente-form">Salvar</button>
+            <a class="button secondary" href="{% url 'lista_clientes' %}">Voltar</a>
+        </div>
+    </div>
+
+    <form class="form-grid" id="cliente-form" method="post">
+        {% csrf_token %}
+
+        <div class="field span-2" data-field="nome">
+            <label for="{{ form.nome.id_for_label }}">{{ form.nome.label }}</label>
+            {{ form.nome }}
+            <div class="errors">{{ form.nome.errors }}</div>
+        </div>
+        <div class="field" data-field="tipo_pessoa">
+            <label for="{{ form.tipo_pessoa.id_for_label }}">{{ form.tipo_pessoa.label }}</label>
+            {{ form.tipo_pessoa }}
+            <div class="errors">{{ form.tipo_pessoa.errors }}</div>
+        </div>
+        <div class="field check-field" data-field="ativo">
+            <label for="{{ form.ativo.id_for_label }}">{{ form.ativo }} {{ form.ativo.label }}</label>
+            <div class="errors">{{ form.ativo.errors }}</div>
+        </div>
+
+        <div class="field span-2" data-field="email">
+            <label for="{{ form.email.id_for_label }}">{{ form.email.label }}</label>
+            {{ form.email }}
+            <div class="errors">{{ form.email.errors }}</div>
+        </div>
+        <div class="field span-2" data-field="telefone">
+            <label for="{{ form.telefone.id_for_label }}">{{ form.telefone.label }}</label>
+            {{ form.telefone }}
+            <div class="errors">{{ form.telefone.errors }}</div>
+        </div>
+
+        <div class="field" data-field="cpf">
+            <label for="{{ form.cpf.id_for_label }}">{{ form.cpf.label }}</label>
+            {{ form.cpf }}
+            <div class="field-status"><span data-counter="cpf">0/11 digitos</span></div>
+            <div class="errors">{{ form.cpf.errors }}</div>
+        </div>
+        <div class="field" data-field="cnpj">
+            <label for="{{ form.cnpj.id_for_label }}">{{ form.cnpj.label }}</label>
+            {{ form.cnpj }}
+            <div class="field-status"><span data-counter="cnpj">0/14 digitos</span></div>
+            <div class="errors">{{ form.cnpj.errors }}</div>
+        </div>
+        <div class="field span-2" data-field="inscricao_estadual">
+            <label for="{{ form.inscricao_estadual.id_for_label }}">{{ form.inscricao_estadual.label }}</label>
+            {{ form.inscricao_estadual }}
+            <div class="errors">{{ form.inscricao_estadual.errors }}</div>
+        </div>
+
+        <div class="field span-2" data-field="rua">
+            <label for="{{ form.rua.id_for_label }}">{{ form.rua.label }}</label>
+            {{ form.rua }}
+            <div class="errors">{{ form.rua.errors }}</div>
+        </div>
+        <div class="field" data-field="numero">
+            <label for="{{ form.numero.id_for_label }}">{{ form.numero.label }}</label>
+            {{ form.numero }}
+            <div class="errors">{{ form.numero.errors }}</div>
+        </div>
+        <div class="field" data-field="bairro">
+            <label for="{{ form.bairro.id_for_label }}">{{ form.bairro.label }}</label>
+            {{ form.bairro }}
+            <div class="errors">{{ form.bairro.errors }}</div>
+        </div>
+
+        <div class="field" data-field="cidade">
+            <label for="{{ form.cidade.id_for_label }}">{{ form.cidade.label }}</label>
+            {{ form.cidade }}
+            <div class="errors">{{ form.cidade.errors }}</div>
+        </div>
+        <div class="field" data-field="estado">
+            <label for="{{ form.estado.id_for_label }}">{{ form.estado.label }}</label>
+            {{ form.estado }}
+            <div class="errors">{{ form.estado.errors }}</div>
+        </div>
+        <div class="field" data-field="cep">
+            <label for="{{ form.cep.id_for_label }}">{{ form.cep.label }}</label>
+            {{ form.cep }}
+            <div class="field-status"><span data-counter="cep">0/8 digitos</span><span data-cep-status></span></div>
+            <div class="errors">{{ form.cep.errors }}</div>
+        </div>
+        <div class="field" data-field="endereco">
+            <label for="{{ form.endereco.id_for_label }}">{{ form.endereco.label }}</label>
+            {{ form.endereco }}
+            <div class="errors">{{ form.endereco.errors }}</div>
+        </div>
+
+        <div class="field span-4" data-field="observacoes">
+            <label for="{{ form.observacoes.id_for_label }}">{{ form.observacoes.label }}</label>
+            {{ form.observacoes }}
+            <div class="errors">{{ form.observacoes.errors }}</div>
+        </div>
+
+        <div class="form-actions">
+            <button class="button" type="submit">Salvar</button>
+            <a class="button secondary" href="{% url 'lista_clientes' %}">Cancelar</a>
+        </div>
+    </form>
+</section>
+
+<script>
+    const tipoPessoa = document.querySelector('[name="tipo_pessoa"]');
+    const camposFisica = document.querySelectorAll('[data-field="cpf"]');
+    const camposJuridica = document.querySelectorAll('[data-field="cnpj"], [data-field="inscricao_estadual"]');
+    const cpfInput = document.querySelector('[name="cpf"]');
+    const cnpjInput = document.querySelector('[name="cnpj"]');
+    const cepInput = document.querySelector('[name="cep"]');
+    const ruaInput = document.querySelector('[name="rua"]');
+    const bairroInput = document.querySelector('[name="bairro"]');
+    const cidadeInput = document.querySelector('[name="cidade"]');
+    const estadoInput = document.querySelector('[name="estado"]');
+    const cepStatus = document.querySelector('[data-cep-status]');
+
+    function atualizarCamposDocumento() {
+        const juridica = tipoPessoa && tipoPessoa.value === 'juridica';
+        camposFisica.forEach((campo) => {
+            campo.style.display = juridica ? 'none' : 'block';
+        });
+        camposJuridica.forEach((campo) => {
+            campo.style.display = juridica ? 'block' : 'none';
+        });
+    }
+
+    if (tipoPessoa) {
+        tipoPessoa.addEventListener('change', atualizarCamposDocumento);
+        atualizarCamposDocumento();
+    }
+
+    function apenasDigitos(valor, limite) {
+        return valor.replace(/\D/g, '').slice(0, limite);
+    }
+
+    function atualizarContador(nome, atual, total) {
+        const contador = document.querySelector(`[data-counter="${nome}"]`);
+        if (contador) {
+            contador.textContent = `${atual}/${total} digitos`;
+        }
+    }
+
+    function formatarCpf(valor) {
+        const digitos = apenasDigitos(valor, 11);
+        atualizarContador('cpf', digitos.length, 11);
+        return digitos
+            .replace(/(\d{3})(\d)/, '$1.$2')
+            .replace(/(\d{3})(\d)/, '$1.$2')
+            .replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+    }
+
+    function formatarCnpj(valor) {
+        const digitos = apenasDigitos(valor, 14);
+        atualizarContador('cnpj', digitos.length, 14);
+        return digitos
+            .replace(/^(\d{2})(\d)/, '$1.$2')
+            .replace(/^(\d{2})\.(\d{3})(\d)/, '$1.$2.$3')
+            .replace(/\.(\d{3})(\d)/, '.$1/$2')
+            .replace(/(\d{4})(\d)/, '$1-$2');
+    }
+
+    function formatarCep(valor) {
+        const digitos = apenasDigitos(valor, 8);
+        atualizarContador('cep', digitos.length, 8);
+        return digitos.replace(/(\d{5})(\d)/, '$1-$2');
+    }
+
+    async function buscarEnderecoPorCep() {
+        const digitos = apenasDigitos(cepInput.value, 8);
+        if (!cepStatus || digitos.length !== 8) {
+            if (cepStatus) cepStatus.textContent = '';
+            return;
+        }
+
+        cepStatus.textContent = 'Buscando...';
+
+        try {
+            const resposta = await fetch(`https://viacep.com.br/ws/${digitos}/json/`);
+            const endereco = await resposta.json();
+
+            if (endereco.erro) {
+                cepStatus.textContent = 'CEP nao encontrado';
+                cepStatus.parentElement.classList.add('error');
+                return;
+            }
+
+            if (ruaInput && endereco.logradouro) ruaInput.value = endereco.logradouro;
+            if (bairroInput && endereco.bairro) bairroInput.value = endereco.bairro;
+            if (cidadeInput && endereco.localidade) cidadeInput.value = endereco.localidade;
+            if (estadoInput && endereco.uf) estadoInput.value = endereco.uf;
+
+            cepStatus.parentElement.classList.remove('error');
+            cepStatus.textContent = 'Endereco preenchido';
+        } catch (error) {
+            cepStatus.textContent = 'Nao foi possivel buscar';
+            cepStatus.parentElement.classList.add('error');
+        }
+    }
+
+    if (cpfInput) {
+        cpfInput.value = formatarCpf(cpfInput.value);
+        cpfInput.addEventListener('input', () => {
+            cpfInput.value = formatarCpf(cpfInput.value);
+        });
+    }
+
+    if (cnpjInput) {
+        cnpjInput.value = formatarCnpj(cnpjInput.value);
+        cnpjInput.addEventListener('input', () => {
+            cnpjInput.value = formatarCnpj(cnpjInput.value);
+        });
+    }
+
+    if (cepInput) {
+        cepInput.value = formatarCep(cepInput.value);
+        cepInput.addEventListener('input', () => {
+            cepInput.value = formatarCep(cepInput.value);
+            buscarEnderecoPorCep();
+        });
+        cepInput.addEventListener('blur', buscarEnderecoPorCep);
+    }
+</script>
+{% endblock %}

@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %}Criar conta | Projeto Cliente{% endblock %}
+
+{% block content %}
+<section class="panel auth-box">
+    <h1>Criar usuário</h1>
+    <p class="muted">Cadastre um usuário e senha para entrar no sistema.</p>
+
+    <form method="post">
+        {% csrf_token %}
+        {% for field in form %}
+            <div class="field">
+                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                {{ field }}
+                {% if field.help_text %}
+                    <div class="helptext">{{ field.help_text }}</div>
+                {% endif %}
+                {% if field.errors %}
+                    <div class="errors">{{ field.errors }}</div>
+                {% endif %}
+            </div>
+        {% endfor %}
+
+        <button class="button" type="submit">Criar conta</button>
+    </form>
+</section>
+{% endblock %}

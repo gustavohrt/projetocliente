@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block title %}Excluir cliente | Projeto Cliente{% endblock %}
+
+{% block content %}
+<section class="panel">
+    <h1>Excluir cliente</h1>
+    <p>Tem certeza que deseja excluir <strong>{{ cliente.nome }}</strong>?</p>
+
+    <form method="post">
+        {% csrf_token %}
+        <button class="button danger" type="submit">Excluir</button>
+        <a class="button secondary" href="{% url 'lista_clientes' %}">Cancelar</a>
+    </form>
+</section>
+{% endblock %}

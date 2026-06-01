@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ cliente.nome }} | Projeto Cliente{% endblock %}
+
+{% block content %}
+<section class="panel">
+    <div class="header-row">
+        <div>
+            <h1>{{ cliente.nome }}</h1>
+            {% if cliente.ativo %}
+                <span class="badge success">Ativo</span>
+            {% else %}
+                <span class="badge inactive">Inativo</span>
+            {% endif %}
+        </div>
+        <div class="form-toolbar">
+            <a class="button" href="{% url 'editar_cliente' cliente.id %}">Editar</a>
+            <a class="button secondary" href="{% url 'lista_clientes' %}">Voltar</a>
+        </div>
+    </div>
+
+    <div class="details-grid">
+        <div class="detail-item">
+            <div class="detail-label">Tipo</div>
+            <div class="detail-value">{{ cliente.get_tipo_pessoa_display }}</div>
+        </div>
+        <div class="detail-item">
+            <div class="detail-label">Telefone para contato</div>
+            <div class="detail-value">{{ cliente.telefone|default:'-' }}</div>
+        </div>
+        <div class="detail-item">
+            <div class="detail-label">E-mail</div>
+            <div class="detail-value">{{ cliente.email|default:'-' }}</div>
+        </div>
+        <div class="detail-item">
+            <div class="detail-label">CPF</div>
+            <div class="detail-value">{{ cliente.cpf|default:'-' }}</div>
+        </div>
+        <div class="detail-item">
+            <div class="detail-label">CNPJ</div>
+            <div class="detail-value">{{ cliente.cnpj|default:'-' }}</div>
+        </div>
+        <div class="detail-item">
+            <div class="detail-label">Inscricao estadual</div>
+            <div class="detail-value">{{ cliente.inscricao_estadual|default:'-' }}</div>
+        </div>
+        <div class="detail-item">
+            <div class="detail-label">Rua e numero</div>
+            <div class="detail-value">{{ cliente.rua|default:'-' }}{% if cliente.numero %}, {{ cliente.numero }}{% endif %}</div>
+        </div>
+        <div class="detail-item">
+            <div class="detail-label">Bairro</div>
+            <div class="detail-value">{{ cliente.bairro|default:'-' }}</div>
+        </div>
+        <div class="detail-item">
+            <div class="detail-label">Cidade / Estado</div>
+            <div class="detail-value">{{ cliente.cidade|default:'-' }}{% if cliente.estado %} / {{ cliente.estado }}{% endif %}</div>
+        </div>
+        <div class="detail-item">
+            <div class="detail-label">CEP</div>
+            <div class="detail-value">{{ cliente.cep|default:'-' }}</div>
+        </div>
+        <div class="detail-item full">
+            <div class="detail-label">Complemento</div>
+            <div class="detail-value">{{ cliente.endereco|default:'-' }}</div>
+        </div>
+        <div class="detail-item full">
+            <div class="detail-label">Observacoes</div>
+            <div class="detail-value">{{ cliente.observacoes|default:'-'|linebreaksbr }}</div>
+        </div>
+    </div>
+</section>
+{% endblock %}

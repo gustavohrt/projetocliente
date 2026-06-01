@@ -1,0 +1,627 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}Projeto Cliente{% endblock %}</title>
+    <style>
+        :root {
+            --body-bg: #f5f7fb;
+            --sidebar-bg: #172033;
+            --sidebar-soft: #202b42;
+            --panel: #ffffff;
+            --text: #1f2937;
+            --muted: #6b7280;
+            --line: #e5e7eb;
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --success: #198754;
+            --warning: #b7791f;
+            --danger: #dc3545;
+            --shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background: var(--body-bg);
+            color: var(--text);
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 15px;
+        }
+
+        a {
+            color: inherit;
+        }
+
+        input,
+        textarea,
+        select {
+            width: 100%;
+            min-height: 36px;
+            border: 1px solid #cfd6df;
+            border-radius: 6px;
+            background: #fff;
+            color: var(--text);
+            font: inherit;
+            padding: 7px 10px;
+        }
+
+        input[type="checkbox"] {
+            min-height: auto;
+            width: auto;
+            margin-right: 7px;
+        }
+
+        input:focus,
+        textarea:focus,
+        select:focus {
+            border-color: #86b7fe;
+            box-shadow: 0 0 0 4px rgba(13, 110, 253, 0.14);
+            outline: none;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 700;
+        }
+
+        h1,
+        h2,
+        p {
+            margin-top: 0;
+        }
+
+        h1 {
+            font-size: 26px;
+            margin-bottom: 6px;
+        }
+
+        h2 {
+            font-size: 18px;
+            margin-bottom: 16px;
+        }
+
+        .app-shell {
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            position: fixed;
+            inset: 0 auto 0 0;
+            width: 260px;
+            background: var(--sidebar-bg);
+            color: #e5e7eb;
+            display: flex;
+            flex-direction: column;
+            padding: 20px 16px;
+            z-index: 10;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #fff;
+            font-size: 18px;
+            font-weight: 800;
+            text-decoration: none;
+            padding: 8px 10px 20px;
+        }
+
+        .brand-mark {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            background: var(--primary);
+            font-weight: 800;
+        }
+
+        .sidebar-section {
+            color: #9ca3af;
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: .06em;
+            margin: 12px 10px 8px;
+            text-transform: uppercase;
+        }
+
+        .side-nav {
+            display: grid;
+            gap: 4px;
+        }
+
+        .side-link {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-radius: 6px;
+            color: #d1d5db;
+            padding: 10px 12px;
+            text-decoration: none;
+        }
+
+        .side-link:hover,
+        .side-link.active {
+            background: var(--sidebar-soft);
+            color: #fff;
+        }
+
+        .side-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 26px;
+            height: 26px;
+            border-radius: 6px;
+            background: rgba(255, 255, 255, .08);
+            font-size: 13px;
+            font-weight: 800;
+        }
+
+        .sidebar-footer {
+            border-top: 1px solid rgba(255, 255, 255, .1);
+            margin-top: auto;
+            padding: 16px 10px 0;
+        }
+
+        .user-name {
+            color: #fff;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .link-button {
+            background: transparent;
+            border: 0;
+            color: #e5e7eb;
+            cursor: pointer;
+            font: inherit;
+            padding: 0;
+            text-decoration: none;
+        }
+
+        .content {
+            margin-left: 260px;
+            min-height: 100vh;
+        }
+
+        .topbar {
+            align-items: center;
+            background: #fff;
+            border-bottom: 1px solid var(--line);
+            display: flex;
+            justify-content: space-between;
+            min-height: 68px;
+            padding: 0 30px;
+        }
+
+        .topbar-title {
+            font-weight: 800;
+        }
+
+        .topbar-muted {
+            color: var(--muted);
+            font-size: 13px;
+            margin-top: 2px;
+        }
+
+        .container {
+            padding: 28px 30px;
+        }
+
+        .panel {
+            background: var(--panel);
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            padding: 22px;
+        }
+
+        .header-row {
+            align-items: center;
+            display: flex;
+            gap: 16px;
+            justify-content: space-between;
+            margin-bottom: 18px;
+        }
+
+        .button {
+            align-items: center;
+            background: var(--primary);
+            border: 1px solid transparent;
+            border-radius: 6px;
+            color: #fff;
+            cursor: pointer;
+            display: inline-flex;
+            font-weight: 700;
+            justify-content: center;
+            min-height: 40px;
+            padding: 9px 14px;
+            text-decoration: none;
+        }
+
+        .button:hover {
+            background: var(--primary-dark);
+        }
+
+        .button.secondary {
+            background: #fff;
+            border-color: #cfd6df;
+            color: #374151;
+        }
+
+        .button.danger {
+            background: var(--danger);
+        }
+
+        .stats-grid {
+            display: grid;
+            gap: 16px;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            margin-bottom: 18px;
+        }
+
+        .stat-card {
+            background: #fff;
+            border: 1px solid var(--line);
+            border-left: 4px solid var(--primary);
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            padding: 18px;
+        }
+
+        .stat-card.success {
+            border-left-color: var(--success);
+        }
+
+        .stat-card.warning {
+            border-left-color: var(--warning);
+        }
+
+        .stat-label {
+            color: var(--muted);
+            font-size: 13px;
+            font-weight: 800;
+            text-transform: uppercase;
+        }
+
+        .stat-value {
+            font-size: 28px;
+            font-weight: 800;
+            margin-top: 8px;
+        }
+
+        .search-form {
+            display: grid;
+            gap: 10px;
+            grid-template-columns: minmax(220px, 1fr) auto;
+            margin-bottom: 16px;
+        }
+
+        .table-wrap {
+            overflow-x: auto;
+        }
+
+        table {
+            border-collapse: collapse;
+            min-width: 920px;
+            width: 100%;
+        }
+
+        th,
+        td {
+            border-bottom: 1px solid var(--line);
+            padding: 13px 12px;
+            text-align: left;
+            vertical-align: top;
+        }
+
+        th {
+            background: #f9fafb;
+            color: #4b5563;
+            font-size: 12px;
+            letter-spacing: .03em;
+            text-transform: uppercase;
+        }
+
+        tbody tr:hover {
+            background: #f9fbff;
+        }
+
+        .badge {
+            border-radius: 999px;
+            display: inline-flex;
+            font-size: 12px;
+            font-weight: 800;
+            padding: 5px 9px;
+        }
+
+        .badge.info {
+            background: #e7f1ff;
+            color: #0a58ca;
+        }
+
+        .badge.success {
+            background: #e9f7ef;
+            color: #146c43;
+        }
+
+        .badge.inactive {
+            background: #f1f3f5;
+            color: #6b7280;
+        }
+
+        .actions {
+            display: flex;
+            gap: 6px;
+            white-space: nowrap;
+        }
+
+        .icon-action {
+            align-items: center;
+            border: 1px solid #d7dee7;
+            border-radius: 6px;
+            color: #374151;
+            display: inline-flex;
+            height: 34px;
+            justify-content: center;
+            text-decoration: none;
+            width: 34px;
+        }
+
+        .icon-action svg {
+            height: 17px;
+            width: 17px;
+        }
+
+        .icon-action:hover {
+            background: #edf4ff;
+            border-color: #9fc2ff;
+            color: var(--primary);
+        }
+
+        .icon-action.danger:hover {
+            background: #fff1f2;
+            border-color: #f7afb7;
+            color: var(--danger);
+        }
+
+        .form-panel {
+            max-width: none;
+            padding: 18px 22px;
+        }
+
+        .form-toolbar {
+            display: flex;
+            gap: 10px;
+        }
+
+        .check-field label {
+            align-items: center;
+            display: flex;
+            gap: 5px;
+        }
+
+        .details-grid {
+            display: grid;
+            gap: 18px 24px;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+
+        .detail-item {
+            border-bottom: 1px solid var(--line);
+            min-height: 56px;
+            padding-bottom: 12px;
+        }
+
+        .detail-item.full {
+            grid-column: 1 / -1;
+        }
+
+        .detail-label {
+            color: var(--muted);
+            font-size: 12px;
+            font-weight: 800;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+        }
+
+        .detail-value {
+            font-size: 15px;
+        }
+
+        .field {
+            margin-bottom: 0;
+        }
+
+        .form-grid {
+            display: grid;
+            gap: 12px 16px;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+        }
+
+        .span-2 {
+            grid-column: span 2;
+        }
+
+        .span-4,
+        .form-actions {
+            grid-column: 1 / -1;
+        }
+
+        .form-actions {
+            border-top: 1px solid var(--line);
+            display: flex;
+            gap: 10px;
+            padding-top: 14px;
+        }
+
+        .form-panel .header-row {
+            margin-bottom: 14px;
+        }
+
+        .form-panel h1 {
+            font-size: 22px;
+        }
+
+        .form-grid label {
+            font-size: 13px;
+            margin-bottom: 4px;
+        }
+
+        .form-grid textarea {
+            min-height: 54px;
+            resize: vertical;
+        }
+
+        .helptext,
+        .muted {
+            color: var(--muted);
+            font-size: 14px;
+        }
+
+        .field-status {
+            color: var(--muted);
+            display: flex;
+            font-size: 12px;
+            justify-content: space-between;
+            margin-top: 4px;
+        }
+
+        .field-status.error {
+            color: var(--danger);
+        }
+
+        .errors {
+            color: var(--danger);
+            margin: 6px 0 0;
+            font-size: 14px;
+        }
+
+        .errors:empty {
+            display: none;
+        }
+
+        .auth-layout {
+            display: grid;
+            min-height: 100vh;
+            place-items: center;
+            padding: 24px;
+        }
+
+        .auth-box {
+            max-width: 460px;
+            width: 100%;
+        }
+
+        .mobile-brand {
+            display: none;
+        }
+
+        @media (max-width: 900px) {
+            .sidebar {
+                position: static;
+                width: 100%;
+            }
+
+            .content {
+                margin-left: 0;
+            }
+
+            .sidebar-footer {
+                margin-top: 16px;
+            }
+
+            .topbar {
+                padding: 16px;
+            }
+
+            .container {
+                padding: 18px 16px;
+            }
+
+            .stats-grid,
+            .form-grid,
+            .details-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .span-2 {
+                grid-column: auto;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .header-row,
+            .search-form {
+                align-items: stretch;
+                display: flex;
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    {% if user.is_authenticated %}
+        <div class="app-shell">
+            <aside class="sidebar">
+                <a class="brand" href="{% url 'lista_clientes' %}">
+                    <span class="brand-mark">PC</span>
+                    <span>Projeto Cliente</span>
+                </a>
+
+                <div class="sidebar-section">Menu</div>
+                <nav class="side-nav">
+                    <a class="side-link active" href="{% url 'lista_clientes' %}">
+                        <span class="side-icon">D</span>
+                        <span>Dashboard</span>
+                    </a>
+                    <a class="side-link" href="{% url 'novo_cliente' %}">
+                        <span class="side-icon">+</span>
+                        <span>Novo cliente</span>
+                    </a>
+                    <a class="side-link" href="{% url 'lista_clientes' %}">
+                        <span class="side-icon">C</span>
+                        <span>Clientes</span>
+                    </a>
+                </nav>
+
+                <div class="sidebar-footer">
+                    <div class="user-name">{{ user.username }}</div>
+                    <form method="post" action="{% url 'logout' %}">
+                        {% csrf_token %}
+                        <button class="link-button" type="submit">Sair</button>
+                    </form>
+                </div>
+            </aside>
+
+            <div class="content">
+                <header class="topbar">
+                    <div>
+                        <div class="topbar-title">Dashboard</div>
+                        <div class="topbar-muted">Cadastro e consulta de clientes</div>
+                    </div>
+                    <a class="button" href="{% url 'novo_cliente' %}">Novo cliente</a>
+                </header>
+                <main class="container">
+    {% else %}
+        <main class="auth-layout">
+    {% endif %}
+                    {% block content %}{% endblock %}
+    {% if user.is_authenticated %}
+                </main>
+            </div>
+        </div>
+    {% else %}
+        </main>
+    {% endif %}
+</body>
+</html>

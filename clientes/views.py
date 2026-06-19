@@ -26,7 +26,7 @@ def cadastrar_usuario(request):
 @login_required
 def lista_clientes(request):
     busca = request.GET.get('busca', '').strip()
-    clientes_base = Cliente.objects.filter(criado_por=request.user)
+    clientes_base = Cliente.objects.all()
     clientes = clientes_base
 
     if busca:
@@ -72,7 +72,7 @@ def novo_cliente(request):
 
 @login_required
 def editar_cliente(request, cliente_id):
-    cliente = get_object_or_404(Cliente, id=cliente_id, criado_por=request.user)
+    cliente = get_object_or_404(Cliente, id=cliente_id)
 
     if request.method == 'POST':
         form = ClienteForm(request.POST, instance=cliente)
@@ -87,13 +87,13 @@ def editar_cliente(request, cliente_id):
 
 @login_required
 def ver_cliente(request, cliente_id):
-    cliente = get_object_or_404(Cliente, id=cliente_id, criado_por=request.user)
+    cliente = get_object_or_404(Cliente, id=cliente_id)
     return render(request, 'clientes/ver_cliente.html', {'cliente': cliente})
 
 
 @login_required
 def excluir_cliente(request, cliente_id):
-    cliente = get_object_or_404(Cliente, id=cliente_id, criado_por=request.user)
+    cliente = get_object_or_404(Cliente, id=cliente_id)
 
     if request.method == 'POST':
         cliente.delete()
@@ -107,7 +107,7 @@ class ClienteViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
-        return Cliente.objects.filter(criado_por=self.request.user)
+        return Cliente.objects.all()
 
     def perform_create(self, serializer):
         serializer.save(criado_por=self.request.user)

@@ -5,7 +5,7 @@ Sistema web em Django para cadastro, consulta, edicao e exclusao de clientes, co
 ## Tecnologias
 
 - Python
-- Django
+- Django 5.2 LTS
 - Django REST Framework
 - SQLite
 
@@ -37,6 +37,8 @@ source venv/bin/activate
 ```bash
 pip install -r requirements.txt
 ```
+
+O projeto esta configurado com Django 5.2 LTS para funcionar tambem com Python 3.10, que e uma versao comum nos ambientes do PythonAnywhere.
 
 4. Crie o banco de dados:
 
@@ -187,3 +189,23 @@ python manage.py test
 ## Observacao para integracao
 
 Todos os usuarios autenticados acessam a mesma lista de clientes. Portanto, um cliente cadastrado por um usuario aparece para os outros usuarios logados e tambem na API.
+
+## Publicacao no PythonAnywhere
+
+No Bash do PythonAnywhere, apos criar o API token na pagina Account, rode:
+
+```bash
+pip install --user pythonanywhere
+```
+
+Depois:
+
+```bash
+pa_autoconfigure_django.py https://github.com/gustavohrt/projetocliente.git --python=3.10
+```
+
+Ao final, acesse:
+
+```text
+https://gustavohrt.pythonanywhere.com/
+```
